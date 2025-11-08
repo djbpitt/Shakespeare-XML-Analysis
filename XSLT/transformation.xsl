@@ -3,14 +3,15 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
-    exclude-result-prefixes="xs map"
+    xpath-default-namespace="http://www.tei-c.org/ns/1.0"
+    exclude-result-prefixes="#all"
     version="3.0">
     
     <xsl:output method="xml" indent="yes"/>
     
     <!-- Load the neologism list -->
-    <xsl:include href="../DigitalHumanities/neologisms-map.xsl"/>
-    <xsl:variable name="neologism-map" select="$neologisms"/>
+    <xsl:include href="neologisms-map.xsl"/>
+
     
     <xsl:template match="/">
         <!-- Copy the play XML but modify <w> elements as needed -->
@@ -27,9 +28,9 @@
     <xsl:template match="w">
         <xsl:variable name="word" select="lower-case(normalize-space(.))"/>
         <xsl:choose>
-            <xsl:when test="map:contains($neologism-map, $word)">
+            <xsl:when test="map:contains($neologisms, $word)">
                 <xsl:copy>
-                    <xsl:attribute name="ana" select="map:get($neologism-map, $word)"/>
+                    <xsl:attribute name="ana" select="map:get($neologisms, $word)"/>
                     <xsl:value-of select="."/>
                 </xsl:copy>
             </xsl:when>
